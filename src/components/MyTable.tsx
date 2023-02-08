@@ -11,7 +11,7 @@ import { IData } from '../interfaces/IData'
 import './MyTable.css'
 
 const MyTable = ():ReactElement => {
-    const [data, setData] = useState(new Array<IData>)
+    const [data, setData] = useState(Array<IData>)
     const [keyword, setKeyword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isCloseInput, setIsCloseInput] = useState(false)
