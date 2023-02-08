@@ -5,3 +5,8 @@
     right: 53px;
     cursor: pointer;
 }
+
+.btn-secondary {
+    background: #0069d9 !important;
+    box-shadow: none !important;
+}
