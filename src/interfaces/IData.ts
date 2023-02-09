@@ -1,8 +1,8 @@
 export interface IData {
-    id: String;
-    name: String;
-    status: String;
-    type: String;
-    createdOn: String;
+    id: string;
+    name: string;
+    status: string;
+    type: string;
+    createdOn: string;
     archived: Boolean;
 }

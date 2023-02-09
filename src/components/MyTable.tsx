@@ -34,11 +34,21 @@ const MyTable = ():ReactElement => {
     const [keyword, setKeyword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isCloseInput, setIsCloseInput] = useState(false)
+    const [message, setMessage] = useState('')
+    const [isShowMessage, setIsShowMessage] = useState(false)
 
     const handleSearch = () => {
         setIsLoading(true)
-        const result = liveSearch(keyword)
-        setData(result)
+        const data = liveSearch(keyword)
+        if(data.message === 'error'){
+            setMessage("Invalid Search, please check again!")
+            setIsShowMessage(true)
+            setTimeout(()=> {
+                setIsShowMessage(false)
+            }, 3000)
+        } else {
+            setData(data.result)
+        }
         setTimeout(()=> {
             setIsLoading(false)
         }, 1000)
@@ -151,6 +161,12 @@ const MyTable = ():ReactElement => {
                     </button>
                 </div>
             </div>
+
+            { isShowMessage ? (
+                <div className="alert alert-danger" role="alert">
+                    {message}
+                </div>
+            ) : null }
 
             <div className="position-relative" >
                 { isLoading ? <Loader /> : null }

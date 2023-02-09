@@ -1,56 +1,45 @@
 import dataList from '../constants/db.json'
+import { IData } from '../interfaces/IData';
 import { formatData } from "./formater";
 
 export const liveSearch = (keyword:string) => {
     let isAdvanceSearch = keyword.includes("is:") || keyword.includes("not:")
-    let result:any = []
+    let result:Array<IData> = []
+    let message:string = ''
 
     if(isAdvanceSearch){
         const keywordCoba = keyword.split(' ')
-        const group:any = []
+        const group:Array<IData> = []
         keywordCoba.forEach(key => {
             const subKey = key.split(':')
             if(subKey[0] === 'is'){
                 const childKey = subKey[1].split('=')
                 if(childKey[0].toLowerCase() === 'status'){
-                    for (const data of dataList) {
-                        if(data.status.toLowerCase() === childKey[1].toLowerCase()){
-                            group.push(data)
+                    result = dataList.filter((data) => data.status.toLowerCase() === childKey[1].toLowerCase())
+                } else if(childKey[0].toLowerCase() === 'type'){
+                    result = dataList.filter((data) => data.type.toLowerCase() === childKey[1].toLowerCase())
+                } else {
+                    message = 'error'
+                }
+            } else if(subKey[0] === 'not'){
+                if(subKey[1] !== undefined){
+                    if(subKey[1].includes('=')){
+                        const childKey = subKey[1].split('=')
+                        if(childKey[0].toLowerCase() === 'status'){
+                            result = result.filter((data) => data.status.toLowerCase() !== childKey[1].toLowerCase())
+                        } else if(childKey[0].toLowerCase() === 'type'){
+                            result = result.filter((data) => data.type.toLowerCase() !== childKey[1].toLowerCase())
+                        } {
+                            message = 'message'
                         }
                     }
+                } else {
+                    message = 'error'
                 }
-
-                if(childKey[0].toLowerCase() === 'type'){
-                    for (const data of dataList) {
-                        if(result.type.toLowerCase() === childKey[1].toLowerCase()){
-                            group.push(data)
-                        }
-                    }
-                }
+            } else {
+                message = 'error'
             }
 
-            if(subKey[0] === 'not'){
-                const notData = []
-                const childKey = subKey[1].split('=')
-                if(childKey[0].toLowerCase() === 'status'){
-                    for (const data of group) {
-                        if(data.status.toLowerCase() !== childKey[1].toLowerCase()){
-                            notData.push(data)
-                        }
-                    }
-                }
-
-                if(childKey[0].toLowerCase() === 'type'){
-                    for (const data of group) {
-                        if(data.type.toLowerCase() !== childKey[1].toLowerCase()){
-                            console.log('1')
-                            notData.push(data)
-                        }
-                    }
-                }
-
-                result = notData
-            }
         });
     } else {
         for (var i = 0; i < dataList.length; i++) {
@@ -60,6 +49,6 @@ export const liveSearch = (keyword:string) => {
         }
     }
 
-    console.log(result)
-    return formatData(result)
+    result = formatData(result)
+    return {result, message}
 }
