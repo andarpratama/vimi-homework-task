@@ -9,7 +9,6 @@ export const liveSearch = (keyword:string) => {
 
     if(isAdvanceSearch){
         const keywordCoba = keyword.split(' ')
-        const group:Array<IData> = []
         keywordCoba.forEach(key => {
             const subKey = key.split(':')
             if(subKey[0] === 'is'){
@@ -29,7 +28,7 @@ export const liveSearch = (keyword:string) => {
                             result = result.filter((data) => data.status.toLowerCase() !== childKey[1].toLowerCase())
                         } else if(childKey[0].toLowerCase() === 'type'){
                             result = result.filter((data) => data.type.toLowerCase() !== childKey[1].toLowerCase())
-                        } {
+                        } else {
                             message = 'message'
                         }
                     }
